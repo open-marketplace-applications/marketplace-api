@@ -13,3 +13,14 @@ services:
       POSTGRES_PASSWORD: canduma
     ports:
       - 5432:5432
+
+  api:
+    build: .
+    ports:
+      - 3000:3000
+    command: bash -c "bash ./wait-for-it.sh pg:5432 -- sh start_app.sh pg"
+    depends_on: 
+      - pg
+    environment:
+      - RUST_BACKTRACE=full
+      - DATABASE_URL=postgres://postgres:canduma@pg/canduma
